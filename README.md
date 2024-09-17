@@ -1,8 +1,8 @@
-# Name of App *(Give your app a short and informative title. Please adhere to our convention of Title Case without hyphens (e.g. My New App))*
+# Python User Interface
 
 MoveApps
 
-Github repository: *github.com/yourAccount/Name-of-App* *(provide the link to the repository where the code of the App can be found)*
+Github repository: *github.com/IrisDB/Python-User-Interface*
 
 ## Description
 *Enter here the short description of the App that might also be used when filling out the description during App submission to MoveApps. This text is directly presented to Users that look through the list of Apps when compiling Workflows.*
@@ -12,17 +12,7 @@ Github repository: *github.com/yourAccount/Name-of-App* *(provide the link to th
 
 ### Application scope
 #### Generality of App usability
-*State here if the App was developed for a specific species, taxon or taxonomic group, or to answer a specific question. How might it influence the scope and utility of the App. This information will help the user to understand why the App might be producing no or odd results.*
-
-*Examples:*
-
-This App was developed using data of birds. 
-
-This App was developed using data of red deer. 
-
 This App was developed for any taxonomic group. 
-
-This App was developed to identify kill sites, but can probably be used to identify any kind of location clusters like nests, dens or drinking holes.
 
 #### Required data properties
 *State here the required and/or optimal data properties for this App to perform properly.*
@@ -36,14 +26,10 @@ The data should have a fix rate of at least 1 location per 30 minutes.
 The App should work for any kind of (location) data.
 
 ### Input type
-*Indicate which type of input data the App requires.*
-
-*Example*: `MovingPandas.TrajectoryCollection`
+`MovingPandas.TrajectoryCollection`
 
 ### Output type
-*Indicate which type of output data the App produces to be passed on to subsequent Apps.*
-
-*Example:* `MovingPandas.TrajectoryCollection`
+`MovingPandas.TrajectoryCollection`
 
 ### Artefacts
 *If the App creates artefacts (e.g. csv, pdf, jpeg, shapefiles, etc), please list them here and describe each.*
@@ -56,17 +42,7 @@ The App should work for any kind of (location) data.
 *Example:* `Radius of resting site` (radius): Defined radius the animal has to stay in for a given duration of time for it to be considered resting site. Unit: `metres`.
 
 ### Changes in output data
-*Specify here how and if the App modifies the input data. Describe clearly what e.g. each additional column means.*
-
-*Examples:*
-
-The App adds to the input data the columns `Max_dist` and `Avg_dist`. They contain the maximum distance to the provided focal location and the average distance to it over all locations. 
-
-The App filterers the input data as selected by the user. 
-
-The output data is the outcome of the model applied to the input data. 
-
-The input data remains unchanged.
+This App passes on data for individuals that were selected in the user interface.
 
 ### Most common errors
 *Please describe shortly what most common errors of the App can be, how they occur and best ways of solving them.*
