@@ -15,15 +15,7 @@ Github repository: *github.com/IrisDB/Python-User-Interface*
 This App was developed for any taxonomic group. 
 
 #### Required data properties
-*State here the required and/or optimal data properties for this App to perform properly.*
-
-*Examples:*
-
-This App is only applicable to data that reflect range resident behavior. 
-
-The data should have a fix rate of at least 1 location per 30 minutes. 
-
-The App should work for any kind of (location) data.
+The App should work for any kind of location data.
 
 ### Input type
 `MovingPandas.TrajectoryCollection`
