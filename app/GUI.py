@@ -1,15 +1,37 @@
 import tkinter as tk
 from tkinter import messagebox # extra import
 
+from matplotlib.figure import Figure 
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk) 
+
+import logging
+
 #Following tutorial here: https://www.youtube.com/watch?v=ibf5cx221hk
 
 
 class MyGui:
 
-    def __init__(self):
+    def __init__(self,fig):
 
+        # Define the main window
         self.root = tk.Tk()
-
+        
+        # Define the title of the window
+        self.root.title("Plot tracks")
+        
+        # Set the size of the window
+        self.root.geometry("1000x750")
+        
+        # Add a figure
+        self.canvas = FigureCanvasTkAgg(fig, master=self.root)
+        self.canvas.draw()
+        
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.root, pack_toolbar=False)
+        self.toolbar.update()
+        
+        self.toolbar.pack(side=tk.BOTTOM, fill=tk.X)
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        '''
         self.menubar = tk.Menu(self.root)
 
         self.filemenu = tk.Menu(self.menubar, tearoff=0)
@@ -42,35 +64,38 @@ class MyGui:
 
         self.clearbtn = tk.Button(self.root, text="Clear", font=('Arial', 18), command=self.clear)
         self.clearbtn.pack(padx=10, pady=10)
-
+        '''
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-
+        
         self.root.mainloop()
 
     def show_message(self):
-        print("Hello World") # print "Hello World" if the button is clicked
-        print(self.check_state.get()) # If the checkbox is checked and the button clicked -> 1, if the checkbox is not checked and the button clicked -> 0
+        logging.info("Hello World") # print "Hello World" if the button is clicked
+        logging.info(self.check_state.get()) # If the checkbox is checked and the button clicked -> 1, if the checkbox is not checked and the button clicked -> 0
 
         if self.check_state.get() == 0:
-            print(self.textbox.get('1.0', tk.END))
+            logging.info(self.textbox.get('1.0', tk.END))
         else:
             messagebox.showinfo(title="Message", message=self.textbox.get('1.0', tk.END))
 
     def shortcut(self, event):
-        print(event.keysym)
-        print(event.state)
+        logging.info(event.keysym)
+        logging.info(event.state)
 
         if event.state == 12 and event.keysym == "Return":
-            print("Hello")
+            logging.info("Hello")
             self.show_message()
 
     def on_closing(self):
-        print("Hello World")
+        logging.info("Hello World")
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
             self.root.destroy()
 
     def clear(self):
         self.textbox.delete('1.0', tk.END)
+        
+    
+        
 
 if __name__ == "__main__":
     MyGui()
