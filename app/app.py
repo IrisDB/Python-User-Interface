@@ -1,7 +1,7 @@
 from sdk.moveapps_spec import hook_impl
 from sdk.moveapps_io import MoveAppsIo
 from movingpandas import TrajectoryCollection
-#from app.GUI import MyGui
+from app.GUI import MyGui
 import logging
 
 
