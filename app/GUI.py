@@ -11,7 +11,7 @@ import logging
 
 class MyGui:
 
-    def __init__(self,fig):
+    def __init__(self,fig,unique_track_ids):
 
         # Define the main window
         self.root = tk.Tk()
@@ -22,7 +22,7 @@ class MyGui:
         # Set the size of the window
         self.root.geometry("1000x750")
         
-        # Add a figure
+        # Add the figure 'fig'
         self.canvas = FigureCanvasTkAgg(fig, master=self.root)
         self.canvas.draw()
         
@@ -31,6 +31,29 @@ class MyGui:
         
         self.toolbar.pack(side=tk.BOTTOM, fill=tk.X)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        
+        
+        
+        # Make a check button for each of the tracks
+        include_track = dict(zip(unique_track_ids,[0]*len(unique_track_ids)))
+        for i in unique_track_ids:
+            include_track[i] = tk.IntVar(value=1)
+            self.check = tk.Checkbutton(self.root, text=i, font=('Arial', 16), variable=include_track[i])
+            self.check.pack()
+        
+        
+        '''
+        for i in unique_track_ids:
+            self.check = tk.Checkbutton(self.root, text=i, font=('Arial', 16), variable=self.check_state)
+            self.check.pack(padx=10, pady=10)
+        
+        self.check_state1 = tk.IntVar()
+        self.check1 = tk.Checkbutton(self.root, text="i", font=('Arial', 16), variable=self.check_state1)
+        
+        
+        self.check1.pack(padx=10, pady=10)
+        '''
+        
         '''
         self.menubar = tk.Menu(self.root)
 

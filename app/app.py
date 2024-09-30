@@ -32,9 +32,7 @@ class App(object):
         
         plot_gdf = plot_tracks(data=data_gdf, track_id_col_name=track_id_col_name)
         
-        
-        
-        MyGui(plot_gdf)
+        MyGui(plot_gdf,unique_track_ids)
 
         auxiliary_file_a = MoveAppsIo.get_auxiliary_file_path("auxiliary-file-a")
         with open(auxiliary_file_a, 'r') as f:
