@@ -1,7 +1,7 @@
 from sdk.moveapps_spec import hook_impl
 from sdk.moveapps_io import MoveAppsIo
 from movingpandas import TrajectoryCollection
-from app.GUI import MyGui
+#from app.GUI import MyGui
 import logging
 
 
@@ -15,7 +15,7 @@ class App(object):
         """Your app code goes here"""
         logging.info(f'Welcome to the {config}')
         
-        MyGui()
+        #MyGui()
 
         auxiliary_file_a = MoveAppsIo.get_auxiliary_file_path("auxiliary-file-a")
         with open(auxiliary_file_a, 'r') as f:
