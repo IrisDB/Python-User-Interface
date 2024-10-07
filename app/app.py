@@ -6,8 +6,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from sdk.moveapps_spec import hook_impl
 from sdk.moveapps_io import MoveAppsIo
 
-from app.plot import plot_tracks
-from app.GUI import MyGui
+from app.GUI import PythonGui
 
 
 
@@ -30,13 +29,9 @@ class App(object):
         # Get the unique track IDS
         unique_track_ids = data_gdf[track_id_col_name].unique()
         
-        plot_gdf = plot_tracks(data=data_gdf, track_id_col_name=track_id_col_name)
-        
-        MyGui(plot_gdf,unique_track_ids)
-
-        auxiliary_file_a = MoveAppsIo.get_auxiliary_file_path("auxiliary-file-a")
-        with open(auxiliary_file_a, 'r') as f:
-            logging.info(f.read())
+        # 
+        updated_data = PythonGui(data_gdf,unique_track_ids,track_id_col_name)
+        print(updated_data)
 
         # return some useful data for next apps in the workflow
         return data
