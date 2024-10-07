@@ -6,13 +6,17 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 
 import logging
 
-#Following tutorial here: https://www.youtube.com/watch?v=ibf5cx221hk
+
 
 
 class MyGui:
 
-    def __init__(self,fig,unique_track_ids):
-
+    def __init__(self,data,unique_track_ids,track_id_col_name):
+    
+        self.data = data
+        self.unique_track_ids = unique_track_ids
+        self.track_id_col_name = track_id_col_name
+        
         # Define the main window
         self.root = tk.Tk()
         
@@ -20,104 +24,71 @@ class MyGui:
         self.root.title("Plot tracks")
         
         # Set the size of the window
-        self.root.geometry("1000x750")
+        self.root.geometry("1000x1000")
         
-        # Add the figure 'fig'
+        # Add some information
+        self.label = tk.Label(self.root, text='Upon closure of this window,\ndata for selected tracks will be passed on to the next App', font=('Arial', 20))
+        self.label.pack(ipadx=10, ipady=10)
+        
+        # Add the figure
+        fig = Figure(figsize = (4.5,4.5))
+        self.ax = fig.add_subplot()
         self.canvas = FigureCanvasTkAgg(fig, master=self.root)
+        self.plot_tracks(self.data,self.track_id_col_name,self.ax)
         self.canvas.draw()
         
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.root, pack_toolbar=False)
         self.toolbar.update()
         
         self.toolbar.pack(side=tk.BOTTOM, fill=tk.X)
-        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.canvas.get_tk_widget().pack()
         
         # Make a check button for each of the tracks
         self.label = tk.Label(self.root, text='Select tracks', font=('Arial', 20))
         self.label.pack(ipadx=10, ipady=10)
-        include_track = dict(zip(unique_track_ids,[0]*len(unique_track_ids)))
-        for i in unique_track_ids:
-            include_track[i] = tk.IntVar(value=1)
-            self.check = tk.Checkbutton(self.root, text=i, font=('Arial', 16), variable=include_track[i])
+        self.include_track = dict(zip(self.unique_track_ids,[0]*len(self.unique_track_ids)))
+        for i in self.unique_track_ids:
+            self.include_track[i] = tk.IntVar(value=1)
+            self.check = tk.Checkbutton(self.root, text=i, font=('Arial', 16), variable=self.include_track[i])
             self.check.pack()
         
-        
-        '''
-        for i in unique_track_ids:
-            self.check = tk.Checkbutton(self.root, text=i, font=('Arial', 16), variable=self.check_state)
-            self.check.pack(padx=10, pady=10)
-        
-        self.check_state1 = tk.IntVar()
-        self.check1 = tk.Checkbutton(self.root, text="i", font=('Arial', 16), variable=self.check_state1)
-        
-        
-        self.check1.pack(padx=10, pady=10)
-        '''
-        
-        '''
-        self.menubar = tk.Menu(self.root)
-
-        self.filemenu = tk.Menu(self.menubar, tearoff=0)
-        self.filemenu.add_command(label="Close", command=self.on_closing)
-        self.filemenu.add_separator()
-        self.filemenu.add_command(label="Close without question", command=exit)
-
-        self.actionmenu = tk.Menu(self.menubar, tearoff=0)
-        self.actionmenu.add_command(label="Show Message", command=self.show_message)
-
-        self.menubar.add_cascade(menu=self.filemenu, label="File")
-        self.menubar.add_cascade(menu=self.actionmenu, label="Action")
-
-        self.root.config(menu=self.menubar)
-
-        self.label = tk.Label(self.root, text="Your Message", font=('Arial', 18))
-        self.label.pack(padx=10, pady=10)
-
-        self.textbox = tk.Text(self.root, height=5, font=('Arial', 18))
-        self.textbox.bind("<KeyPress>", self.shortcut)
-        self.textbox.pack(padx=10, pady=10)
-
-        self.check_state = tk.IntVar()
-
-        self.check = tk.Checkbutton(self.root, text="Show Messagebox", font=('Arial', 16), variable=self.check_state)
-        self.check.pack(padx=10, pady=10)
-
-        self.button = tk.Button(self.root, text="Show Message", font=('Arial', 18), command=self.show_message)
+        # Add a button to save the data for the selected tracks
+        self.button = tk.Button(self.root, text="Save data for selected tracks", font=('Arial', 18), command=self.save_tracks)
         self.button.pack(padx=10, pady=10)
-
-        self.clearbtn = tk.Button(self.root, text="Clear", font=('Arial', 18), command=self.clear)
-        self.clearbtn.pack(padx=10, pady=10)
-        '''
-        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+            
+        # Check whether one of the checkboxes has changed and update the plot if it did
+        for i in self.unique_track_ids:
+            self.include_track[i].trace("w",self.update_data)
         
+        # Close the window if asked
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
-
-    def show_message(self):
-        logging.info("Hello World") # print "Hello World" if the button is clicked
-        logging.info(self.check_state.get()) # If the checkbox is checked and the button clicked -> 1, if the checkbox is not checked and the button clicked -> 0
-
-        if self.check_state.get() == 0:
-            logging.info(self.textbox.get('1.0', tk.END))
-        else:
-            messagebox.showinfo(title="Message", message=self.textbox.get('1.0', tk.END))
-
-    def shortcut(self, event):
-        logging.info(event.keysym)
-        logging.info(event.state)
-
-        if event.state == 12 and event.keysym == "Return":
-            logging.info("Hello")
-            self.show_message()
-
-    def on_closing(self):
-        #logging.info("Hello World")
-        if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
-            self.root.destroy()
-
-    def clear(self):
-        self.textbox.delete('1.0', tk.END)
+        
+    def update_data(self,*args):
+        # Check which tracks are selected and save them in a list
+        include_track = []
+        for i in self.unique_track_ids:
+            if self.include_track[i].get() == 1:
+                include_track.append(i)
+        
+        # Updata the data to only include selected individuals
+        updated_data = self.data[self.data[self.track_id_col_name].isin(include_track)]
+        logging.info("One of the individuals was selected/unselected")
+        self.plot_tracks(updated_data,self.track_id_col_name,self.ax)
         
     
+    def plot_tracks(self,data,track_id_col_name,ax):
+        ax.clear()
+        if len(data) > 0:
+            data.plot(ax=ax,column=track_id_col_name,alpha=0.5)
+        self.canvas.draw()
+        
+    def save_tracks(self):
+        return self.data
+        
+    def on_closing(self):
+        if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
+            self.root.destroy()
         
 
 if __name__ == "__main__":
