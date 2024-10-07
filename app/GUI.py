@@ -32,9 +32,9 @@ class MyGui:
         self.toolbar.pack(side=tk.BOTTOM, fill=tk.X)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         
-        
-        
         # Make a check button for each of the tracks
+        self.label = tk.Label(self.root, text='Select tracks', font=('Arial', 20))
+        self.label.pack(ipadx=10, ipady=10)
         include_track = dict(zip(unique_track_ids,[0]*len(unique_track_ids)))
         for i in unique_track_ids:
             include_track[i] = tk.IntVar(value=1)
@@ -110,7 +110,7 @@ class MyGui:
             self.show_message()
 
     def on_closing(self):
-        logging.info("Hello World")
+        #logging.info("Hello World")
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
             self.root.destroy()
 
