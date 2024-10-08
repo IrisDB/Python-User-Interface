@@ -6,7 +6,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from sdk.moveapps_spec import hook_impl
 from sdk.moveapps_io import MoveAppsIo
 
-from app.GUI import PythonGui
+from app.GUI import MyGui
 
 
 
@@ -30,8 +30,11 @@ class App(object):
         unique_track_ids = data_gdf[track_id_col_name].unique()
         
         # 
-        updated_data = PythonGui(data_gdf,unique_track_ids,track_id_col_name)
-        print(updated_data)
+        updated_data = MyGui(data_gdf,unique_track_ids,track_id_col_name)
+        logging.info(updated_data)
+        
+        # Transfer data back into a TrajectoryCollection
+        return_data = TrajectoryCollection(data_gdf,traj_id_col=track_id_col_name)
 
         # return some useful data for next apps in the workflow
-        return data
+        return return_data
