@@ -29,12 +29,11 @@ class App(object):
         # Get the unique track IDS
         unique_track_ids = data_gdf[track_id_col_name].unique()
         
-        # 
-        updated_data = MyGui(data_gdf,unique_track_ids,track_id_col_name)
-        logging.info(updated_data)
+        # Get the updated data from the Gui
+        updated_data = MyGui(data_gdf,unique_track_ids,track_id_col_name).save_tracks()
         
         # Transfer data back into a TrajectoryCollection
-        return_data = TrajectoryCollection(data_gdf,traj_id_col=track_id_col_name)
+        return_data = TrajectoryCollection(updated_data,traj_id_col=track_id_col_name)
 
         # return some useful data for next apps in the workflow
         return return_data

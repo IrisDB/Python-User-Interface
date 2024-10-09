@@ -90,7 +90,7 @@ class MyGui:
         
     def save_tracks(self):
         logging.info("Tracks are being saved")
-
+        return self.updated_data
 
 if __name__ == "__main__":
     MyGui()
